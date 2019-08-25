@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<style>
+* {
+  box-sizing: border-box;
+}
+
+.header1 {
+
+    width: 50%;
+    margin-left: 50%;
+    font-size: 50px;
+}
+
+#myInput {
+  background-position: 10px 10px;
+  background-repeat: no-repeat;
+  width: 60%;
+  font-size: 50px;
+  padding: 12px 20px 12px 40px;
+  border: 1px solid #ddd;
+  margin-bottom: 40px;
+  margin-left: 20%;
+
+}
+
+#myTable {
+  border-collapse: collapse;
+  width: 60%;
+  border: 1px solid #ddd;
+  font-size: 18px;
+  margin-left: 20%;
+}
+
+#myTable th, #myTable td {
+  text-align: left;
+  padding: 40px;
+  font-size: 25px;
+}
+
+#myTable tr {
+  border-bottom: 1px solid #ddd;
+}
+
+#myTable tr.header, #myTable tr:hover {
+  background-color: #f1f1f1;
+}
+
+</style>
+    {% load static %}
+  <script src="{% static 'js/jquery.js' %}"></script>
+</head>
+<body>
+<div>
+
+<h2 class="header1">Games</h2>
+
+<input type="text" id="myInput" onkeyup="searchGames()" placeholder="Search for Games.." title="Type in a name">
+
+<table id="myTable">
+  <tr class="header">
+    <th style="width:40%;">Title</th>
+    <th style="width:25%;">Platform</th>
+      <th style="width:10%;">Genre</th>
+      <th style="width:10%;">score</th>
+      <th style="width:40%;">Editor Choice</th>
+  </tr>
+
+</table>
+</div>
+<script>
+
+$(document).ready(function(){
+    $.ajax({
+        url: "/api/v1/games/",
+        success: function(result){
+            updateGameList(result.games);
+        }
+     });
+
+})
+function updateGameList(games){
+        $("#myTable").find("tr:gt(0)").remove();
+            var tr;
+            for (var i = 0; i < games.length; i++) {
+                tr = $('<tr/>');
+                tr.append("<td>" + games[i].title + "</td>");
+                tr.append("<td>" + games[i].platform + "</td>");
+                tr.append("<td>" + games[i].genre + "</td>");
+                tr.append("<td>" + games[i].score + "</td>");
+                tr.append("<td>" + games[i].editors_choice + "</td>");
+                $('#myTable').append(tr);
+            }
+    }
+
+function searchGames(){
+        $.ajax({
+            url: "/api/v1/games/search/",
+            data: {'value': $('#myInput').val()},
+            success: function(result){
+                updateGameList(result.games)
+            }
+         });
+    }
+</script>
+
+</body>
+</html>
