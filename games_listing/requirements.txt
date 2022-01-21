@@ -4,7 +4,7 @@ decorator==4.4.0
 Django==1.11.23
 enum34==1.1.6
 ipdb==0.12.2
-ipython==5.8.0
+ipython==7.16.3
 ipython-genutils==0.2.0
 numpy==1.16.4
 pandas==0.24.2
